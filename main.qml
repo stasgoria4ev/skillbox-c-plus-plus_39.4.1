@@ -84,7 +84,7 @@ Window {
                 PropertyChanges {
                     target: ball
                     x: {
-                        if ((ball.x > leftRectangle.x + 5) && (ball.x < (rightRectangle.x + 5 - rightRectangle.width + 5)))
+                        if ((ball.x != leftRectangle.x + 5) && (ball.x < (rightRectangle.x + 5 - rightRectangle.width + 5)))
                             ball.x = (rightRectangle.x + leftRectangle.x) / 2 + 5
                         else
                             ball.x = leftRectangle.x + 5
@@ -95,12 +95,7 @@ Window {
                 name: "OtherState"
                 PropertyChanges {
                     target: ball
-                    x: {
-                        if (ball.x == leftRectangle.x + 5)
-                            ball.x = ball.x
-                        else
-                            ball.x = ball.x
-                    }
+                    x: ball.x
                 }
             }
          ]
@@ -110,7 +105,7 @@ Window {
                 from: "OtherState"
                 to: "InitialState"
                 NumberAnimation {
-                    properties: "x,y"
+                    properties: "x"
                     duration: 1000
                     easing.type: Easing.OutBounce
                 }
