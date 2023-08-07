@@ -11,7 +11,7 @@ Window {
     Rectangle {
         id: scene
         anchors.fill: parent
-        state: ball.x = (rightRectangle.x + leftRectangle.x) / 2 + 5
+        state: "StartState"
 
         Rectangle {
             id: leftRectangle
@@ -31,10 +31,8 @@ Window {
             }
             //
             MouseArea {
-                //id: mouseAreaLeftRectangle
                 anchors.fill: parent
                 onClicked: {
-                    //scene.state = "OtherState"
                     ball.x += 30
                     if (ball.x >= (rightRectangle.x + 5 - rightRectangle.width + 5))
                         scene.state = "InitialState"
@@ -61,10 +59,9 @@ Window {
             }
             //
             MouseArea {
-                //id: mouseAreaRightRectangle
                 anchors.fill: parent
                 onClicked: {
-                    scene.state = "InitialState"
+                    scene.state = "StartState"
                 }
             }
         }
@@ -80,15 +77,17 @@ Window {
 
         states: [
             State {
+                name: "StartState"
+                PropertyChanges {
+                    target: ball
+                    x: (rightRectangle.x + leftRectangle.x) / 2 + 5
+                }
+            } ,
+            State {
                 name: "InitialState"
                 PropertyChanges {
                     target: ball
-                    x: {
-                        if ((ball.x != leftRectangle.x + 5) && (ball.x < (rightRectangle.x + 5 - rightRectangle.width + 5)))
-                            ball.x = (rightRectangle.x + leftRectangle.x) / 2 + 5
-                        else
-                            ball.x = leftRectangle.x + 5
-                    }
+                    x: leftRectangle.x + 5
                 }
             } ,
             State {
@@ -109,7 +108,16 @@ Window {
                     duration: 1000
                     easing.type: Easing.OutBounce
                 }
-            }
+            },
+             Transition {
+                 from: "*"
+                 to: "StartState"
+                 NumberAnimation {
+                     properties: "x"
+                     duration: 1000
+                     easing.type: Easing.OutBounce
+                 }
+             }
          ]
     }
 }
