@@ -11,7 +11,7 @@ Window {
     Rectangle {
         id: scene
         anchors.fill: parent
-        //state: "InitialState"//закомментировал чтобы надпись "move" было видно
+        state: ball.x = (rightRectangle.x + leftRectangle.x) / 2 + 5
 
         Rectangle {
             id: leftRectangle
@@ -31,18 +31,21 @@ Window {
             }
             //
             MouseArea {
+                //id: mouseAreaLeftRectangle
                 anchors.fill: parent
                 onClicked: {
-                    scene.state = "OtherState"
+                    //scene.state = "OtherState"
                     ball.x += 30
                     if (ball.x >= (rightRectangle.x + 5 - rightRectangle.width + 5))
                         scene.state = "InitialState"
+                    else
+                        scene.state = "OtherState"
                 }
             }
         }
         Rectangle {
             id: rightRectangle
-            x: 300
+            x: 430
             y: 200
             color: "lightgrey"
             width: 100
@@ -58,8 +61,11 @@ Window {
             }
             //
             MouseArea {
+                //id: mouseAreaRightRectangle
                 anchors.fill: parent
-                onClicked: scene.state = "InitialState"
+                onClicked: {
+                    scene.state = "InitialState"
+                }
             }
         }
         Rectangle {
@@ -77,14 +83,24 @@ Window {
                 name: "InitialState"
                 PropertyChanges {
                     target: ball
-                    x: leftRectangle.x + 5
+                    x: {
+                        if ((ball.x > leftRectangle.x + 5) && (ball.x < (rightRectangle.x + 5 - rightRectangle.width + 5)))
+                            ball.x = (rightRectangle.x + leftRectangle.x) / 2 + 5
+                        else
+                            ball.x = leftRectangle.x + 5
+                    }
                 }
             } ,
             State {
                 name: "OtherState"
                 PropertyChanges {
                     target: ball
-                    x: ball.x
+                    x: {
+                        if (ball.x == leftRectangle.x + 5)
+                            ball.x = ball.x
+                        else
+                            ball.x = ball.x
+                    }
                 }
             }
          ]
